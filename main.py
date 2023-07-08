@@ -12,7 +12,7 @@ from pynput.mouse import Controller as Controller_mouse
 from pynput.keyboard import Controller as Controller_keyboard
 from pynput.mouse import Button  
 import random
-
+import time
 
 
 
@@ -47,17 +47,15 @@ class WindowClass(QMainWindow, form_class) :
         self.setWindowTitle('빠르고 강력한 한국-영어 단어장! 빠강단!')
         self.setWindowIcon(QIcon("book-24px.svg"))
 
-        self.langAlt()
-
         self.go.clicked.connect(self.saveitem)
         self.dell.clicked.connect(self.dellitem)
         #self.TypeEng.textChanged.connect(self.osusumegogoeng)
+        self.TypeEng.returnPressed.connect(self.langAlt_kor)
         self.TypeEng.returnPressed.connect(self.convertToKor)
-        self.TypeEng.returnPressed.connect(self.langAlt)
         #self.TypeKor.textChanged.connect(self.osusumegogokor)
         self.TypeKor.returnPressed.connect(self.saveitem)
+        self.TypeKor.returnPressed.connect(self.langAlt_jap)
         self.TypeKor.returnPressed.connect(self.convertToEng)
-        self.TypeKor.returnPressed.connect(self.langAlt)
 
         #self.osusumeeng.activated.connect(self.osusumechangeeng)
         #self.osusumekor.activated.connect(self.osusumechangekor)
@@ -126,11 +124,35 @@ class WindowClass(QMainWindow, form_class) :
         except:
             self.filename.setText('cannot find file.')
     
-    def langAlt(self):
-        self.keyboard.press(keyboard.KeyCode.from_vk(21))
-        self.keyboard.release(keyboard.KeyCode.from_vk(21))
+    def langAlt_jap(self):
+        # # english support
+        # self.keyboard.press(keyboard.KeyCode.from_vk(21))
+        # self.keyboard.release(keyboard.KeyCode.from_vk(21)``)
+
+        # japanese support
+        self.keyboard.press(keyboard.Key.cmd) 
+        self.keyboard.press(keyboard.Key.space) 
+        self.keyboard.release(keyboard.Key.cmd)
+        self.keyboard.release(keyboard.Key.space)
+
+        self.keyboard.press(keyboard.Key.alt_l) 
+        self.keyboard.press('`')
+        self.keyboard.release(keyboard.Key.alt_l) 
+        self.keyboard.release('`')
+
+    def langAlt_kor(self):
+        # # english support
+        # self.keyboard.press(keyboard.KeyCode.from_vk(21))
+        # self.keyboard.release(keyboard.KeyCode.from_vk(21)``)
+
+        # japanese support
+        self.keyboard.press(keyboard.Key.cmd) 
+        self.keyboard.press(keyboard.Key.space) 
+        self.keyboard.release(keyboard.Key.cmd)
+        self.keyboard.release(keyboard.Key.space)
 
     def convertToEng(self):
+
         #get and set the Eng mouse position.
         parent_stack = [self.TypeEng]
         parent_pos = [self.TypeEng.pos()]
@@ -148,15 +170,20 @@ class WindowClass(QMainWindow, form_class) :
             xsum += pos.x()
             ysum += pos.y()
 
+        self.mouse.click(Button.left, 1) # first click once to remove other popup windows
+
         icon = self.iconSize()
         pos_before = self.mouse.position
         self.mouse.position = (xsum + 10, ysum + icon.height() + 10)
 
         #click raising
+        time.sleep(0.1)
+        self.mouse.click(Button.left, 1)
+        time.sleep(0.1)
+        self.mouse.click(Button.left, 1)
+        time.sleep(0.1)
         self.mouse.click(Button.left, 1)
 
-        #return its position back.
-        self.mouse.position = pos_before
 
     def convertToKor(self):
         #get and set the Kor mouse position.
@@ -176,15 +203,19 @@ class WindowClass(QMainWindow, form_class) :
             xsum += pos.x()
             ysum += pos.y()
 
+        self.mouse.click(Button.left, 1) # first click once to remove other popup windows
         icon = self.iconSize()
         pos_before = self.mouse.position
         self.mouse.position = (xsum + 10, ysum + icon.height() + 10)
 
         #click raising
+        time.sleep(0.1)
+        self.mouse.click(Button.left, 5)
+        time.sleep(0.1)
+        self.mouse.click(Button.left, 1)
+        time.sleep(0.1)
         self.mouse.click(Button.left, 1)
 
-        #return its position back.
-        self.mouse.position = pos_before
 
     def saveitem(self):
         do = [self.TypeEng.text(), self.TypeKor.text(), self.TypeMemo.text(), 5]  #
