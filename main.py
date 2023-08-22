@@ -71,6 +71,8 @@ class WindowClass(QMainWindow, form_class) :
         self.temptest.clicked.connect(self.tempteststart)
 
         self.filename.setText("selfeng-first-1") #set title.
+
+        self.IsMemoEnabled.stateChanged.connect(self.toggleEnableMemo)
     
     def closeEvent(self, event):
         choice = QMessageBox.question(self, '종료',
@@ -143,16 +145,53 @@ class WindowClass(QMainWindow, form_class) :
     def langAlt_kor(self):
         # # english support
         # self.keyboard.press(keyboard.KeyCode.from_vk(21))
-        # self.keyboard.release(keyboard.KeyCode.from_vk(21)``)
+        # self.keyboard.release(keyboard.KeyCode.from_vk(21))
 
         # japanese support
         self.keyboard.press(keyboard.Key.cmd) 
         self.keyboard.press(keyboard.Key.space) 
         self.keyboard.release(keyboard.Key.cmd)
         self.keyboard.release(keyboard.Key.space)
+        self.keyboard.press(keyboard.KeyCode.from_vk(21))
+        self.keyboard.release(keyboard.KeyCode.from_vk(21))
+
+
+    def convertToType(self, object):
+        #get and set the Eng mouse position.
+        parent_stack = [object]
+        parent_pos = [object.pos()]
+        i = 0
+        while True:
+            parent = parent_stack[i].parentWidget()
+            if parent == None:
+                break
+            parent_stack.append(parent)
+            parent_pos.append(parent.pos())
+            i += 1
+        xsum = 0
+        ysum = 0
+        for pos in parent_pos:
+            xsum += pos.x()
+            ysum += pos.y()
+
+        self.mouse.click(Button.left, 1) # first click once to remove other popup windows
+
+        icon = self.iconSize()
+        self.mouse.position = (xsum + 10, ysum + icon.height() + 10)
+
+        #click raising
+        time.sleep(0.1)
+        self.mouse.click(Button.left, 5)
+        time.sleep(0.1)
+        self.mouse.click(Button.left, 1)
+        time.sleep(0.1)
+        self.mouse.click(Button.left, 1)
+
+    def convertToMemo(self):
+        self.convertToType(self.TypeMemo)
+    
 
     def convertToEng(self):
-
         #get and set the Eng mouse position.
         parent_stack = [self.TypeEng]
         parent_pos = [self.TypeEng.pos()]
@@ -278,7 +317,27 @@ class WindowClass(QMainWindow, form_class) :
     def makecsv(self):
         pd.DataFrame(map(lambda x : x[0:2],self.dict), columns=['영어','한글']).to_csv('testpaper.csv',encoding='utf-8-sig')
         print('done!')
+    
+    def toggleEnableMemo(self):
+        if (self.IsMemoEnabled.isChecked()):
+            # change TypeKort connection
+            self.TypeKor.returnPressed.disconnect() # disconnect all signal
 
+            self.TypeKor.returnPressed.connect(self.langAlt_jap)
+            self.TypeKor.returnPressed.connect(self.convertToMemo)
+
+            # make TypeMemo connection
+            self.TypeMemo.returnPressed.connect(self.saveitem)
+            self.TypeMemo.returnPressed.connect(self.convertToEng)
+        else:
+            # change TypeMemo connection
+            self.TypeMemo.returnPressed.disconnect() # disconnect all signal
+
+            # make TypeKor connection
+            self.TypeKor.returnPressed.disconnect() # disconnect all signal
+            self.TypeKor.returnPressed.connect(self.saveitem)
+            self.TypeKor.returnPressed.connect(self.langAlt_jap)
+            self.TypeKor.returnPressed.connect(self.convertToEng)
 
     def osusumechangeeng(self,index):
         self.TypeEng.setText(self.osusumeeng.currentText())

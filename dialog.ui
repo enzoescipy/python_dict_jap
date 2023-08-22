@@ -191,6 +191,13 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="IsMemoEnabled">
+          <property name="text">
+           <string>메모 허용</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -209,6 +216,12 @@
         <height>0</height>
        </size>
       </property>
+      <property name="font">
+       <font>
+        <family>Mamelon 5 Hi</family>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
       <property name="rowCount">
        <number>0</number>
       </property>
@@ -220,7 +233,7 @@
       </attribute>
       <column>
        <property name="text">
-        <string>영어</string>
+        <string>일본어</string>
        </property>
       </column>
       <column>
@@ -245,7 +258,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>영어</string>
+         <string>일본어</string>
         </property>
        </widget>
       </item>
