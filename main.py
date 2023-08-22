@@ -399,6 +399,7 @@ class WindowClass(QMainWindow, form_class) :
         self.reload_notSort()
         for i in range(self.testnum,len(self.dict),1):
             self.DictList.setItem(i, 1, QTableWidgetItem('????'))
+            self.DictList.setItem(i, 2, QTableWidgetItem('????'))
         self.testnum += 1
     def temptestend(self):
         self.reload_shuffle()
