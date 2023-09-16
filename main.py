@@ -27,7 +27,7 @@ def resource_path(relative_path):
 form_class = uic.loadUiType("dialog.ui")[0]
 
 #화면을 띄우는데 사용되는 Class 선언
-class WindowClass(QMainWindow, form_class) :
+class WindowClass(QDialog, form_class) :
     def __init__(self) :
         super().__init__()
         self.dict = []
@@ -281,6 +281,7 @@ class WindowClass(QMainWindow, form_class) :
                     for j in range(len(hahadict[i])):
                         if hahadict[i][j] == item:
                             self.dict.pop(i)
+                            break
 
     def min_count(self):
         if self.DictList.currentColumn() == 0:
