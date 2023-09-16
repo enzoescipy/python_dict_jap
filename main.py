@@ -176,8 +176,7 @@ class WindowClass(QDialog, form_class) :
 
         self.mouse.click(Button.left, 1) # first click once to remove other popup windows
 
-        icon = self.iconSize()
-        self.mouse.position = (xsum + 10, ysum + icon.height() + 10)
+        self.mouse.position = (xsum + 10, ysum + 50)
 
         #click raising
         time.sleep(0.1)
@@ -211,9 +210,7 @@ class WindowClass(QDialog, form_class) :
 
         self.mouse.click(Button.left, 1) # first click once to remove other popup windows
 
-        icon = self.iconSize()
-        pos_before = self.mouse.position
-        self.mouse.position = (xsum + 10, ysum + icon.height() + 10)
+        self.mouse.position = (xsum + 10, ysum + 50)
 
         #click raising
         time.sleep(0.1)
@@ -243,9 +240,7 @@ class WindowClass(QDialog, form_class) :
             ysum += pos.y()
 
         self.mouse.click(Button.left, 1) # first click once to remove other popup windows
-        icon = self.iconSize()
-        pos_before = self.mouse.position
-        self.mouse.position = (xsum + 10, ysum + icon.height() + 10)
+        self.mouse.position = (xsum + 10, ysum + 50)
 
         #click raising
         time.sleep(0.1)
